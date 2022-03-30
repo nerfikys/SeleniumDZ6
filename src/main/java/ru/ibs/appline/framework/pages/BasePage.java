@@ -4,8 +4,6 @@ package ru.ibs.appline.framework.pages;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -36,30 +34,23 @@ public class BasePage {
 
     @FindBy(xpath = "//header")
     protected WebElement header;
+
     public Header getHeader() {
         return new Header(header);
     }
 
     @Step("Распечатка отчёта")
-    @Attachment(value = "ProductList",type = "text/plain",fileExtension = ".txt")
-    public byte[] printListOfProduct(){
-       return dataManager.toString().getBytes(StandardCharsets.UTF_8);
+    @Attachment(value = "ProductList", type = "text/plain", fileExtension = ".txt")
+    public byte[] printListOfProduct() {
+        return dataManager.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     protected WebElement waitToClickable(WebElement webElement) {
-        WebElement x = wait.until(ExpectedConditions.elementToBeClickable(webElement));
-        return x;
+        return wait.until(ExpectedConditions.elementToBeClickable(webElement));
     }
 
     protected WebElement waitUtilElementToBeVisible(WebElement element) {
-        WebElement x = wait.until(ExpectedConditions.visibilityOf(element));
-        return x;
+        return wait.until(ExpectedConditions.visibilityOf(element));
     }
-    public static void waits(int milss){
-        try {
-            Thread.sleep(milss);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

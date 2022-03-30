@@ -1,7 +1,5 @@
 package ru.ibs.appline.framework.data;
 
-import ru.ibs.appline.framework.manager.DataManager;
-
 import java.util.Objects;
 
 public class Product {

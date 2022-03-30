@@ -7,7 +7,7 @@ import ru.ibs.appline.framework.manager.InitManager;
 import ru.ibs.appline.framework.manager.PageManager;
 
 @ExtendWith(Screenshot.class)
-public class BaseTests {
+public class Base {
 
     protected PageManager app = PageManager.getINSTANCE();
 
@@ -18,7 +18,7 @@ public class BaseTests {
 
     @AfterEach
     public void after() {
-      //  InitManager.quitFramework();
+        InitManager.quitFramework();
     }
 
 }

@@ -37,7 +37,7 @@ public class BasketPage extends BasePage {
     public BasketPage checkBasketPull() {
         wait.until(ExpectedConditions.visibilityOfAllElements(mainList));
         List<Product> productList = (ArrayList) dataManager.getProductArrayList().clone();
-        List<Product> productList2= new ArrayList<>();
+        List<Product> productList2 = new ArrayList<>();
         List<WebElement> main = new ArrayList<>();
         List<WebElement> main2 = new ArrayList<>();
         main.addAll(mainList);
@@ -52,28 +52,28 @@ public class BasketPage extends BasePage {
                 }
             }
         }
-        Assertions.assertTrue(main.containsAll(main2)&&main.size()==main2.size(), "На странице остались элементы которых нет в списке");
-        Assertions.assertTrue(productList.containsAll(productList2)&&productList.size()==productList2.size(), "В списке остались элементы которых нет на странице");
+        Assertions.assertTrue(main.containsAll(main2) && main.size() == main2.size(), "На странице остались элементы которых нет в списке");
+        Assertions.assertTrue(productList.containsAll(productList2) && productList.size() == productList2.size(), "В списке остались элементы которых нет на странице");
         return this;
     }
 
     @Step("Проверяем текст \"Ваша корзина {number} товаров\"")
-    public BasketPage checkTextBasketProducts(int number){
-        Assertions.assertTrue(totalInfo.get(0).getText().contains("Ваша корзина"),"Не найден текст 'Ваша корзина'");
-        Assertions.assertTrue(totalInfo.get(1).getText().contains(number+" товаров"),"Число товаров не совпало ожидалось: "+number+", а на самом деле: "+totalInfo.get(1).getText().split(" ")[0]);
+    public BasketPage checkTextBasketProducts(int number) {
+        Assertions.assertTrue(totalInfo.get(0).getText().contains("Ваша корзина"), "Не найден текст 'Ваша корзина'");
+        Assertions.assertTrue(totalInfo.get(1).getText().contains(number + " товаров"), "Число товаров не совпало ожидалось: " + number + ", а на самом деле: " + totalInfo.get(1).getText().split(" ")[0]);
         return this;
     }
 
     @Step("Удалить всё из корзины")
-    public BasketPage dellAllFromBasket(){
+    public BasketPage dellAllFromBasket() {
         waitToClickable(dell).click();
         waitToClickable(driverManager.getDriver().findElement(By.xpath("//div[contains(text(),'Удаление товаров')]/..//button"))).click();
         return this;
     }
 
     @Step("Проверка что корзина пуста")
-    public BasketPage checkEmpty(){
-        Assertions.assertEquals("Корзина пуста",driverManager.getDriver().findElement(By.xpath("//h1")).getText(),"На странице не найден необходимый текст");
-        return  this;
+    public BasketPage checkEmpty() {
+        Assertions.assertEquals("Корзина пуста", driverManager.getDriver().findElement(By.xpath("//h1")).getText(), "На странице не найден необходимый текст");
+        return this;
     }
 }

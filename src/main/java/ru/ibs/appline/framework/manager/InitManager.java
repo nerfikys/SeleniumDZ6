@@ -16,7 +16,6 @@ public class InitManager {
         driverManager.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(props.getProperty(IMPLICITLY_WAIT))));
         driverManager.getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Integer.parseInt(props.getProperty(PAGE_LOAD_TIMEOUT))));
         driverManager.getDriver().get(TestPropManager.getINSTANCE().getProperty(BASE_URL));
-
     }
 
     public static void quitFramework() {

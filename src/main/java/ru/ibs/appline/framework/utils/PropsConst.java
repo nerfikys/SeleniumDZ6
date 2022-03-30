@@ -14,6 +14,22 @@ public class PropsConst {
 
     public static final String PATH_GECKO_DRIVER_WIDOWS = "path.gecko.driver.windows";
 
+    public static final String PATH_CHROME_DRIVER_MAC = "path.chrome.driver.mac";
+
+    public static final String PATH_OPERA_DRIVER_MAC = "path.opera.driver.mac";
+
+    public static final String PATH_EDGE_DRIVER_MAC = "path.edge.driver.mac";
+
+    public static final String PATH_GECKO_DRIVER_MAC = "path.gecko.driver.mac";
+
+    public static final String PATH_CHROME_DRIVER_UNIX = "path.chrome.driver.unix";
+
+    public static final String PATH_OPERA_DRIVER_UNIX = "path.opera.driver.unix";
+
+    public static final String PATH_EDGE_DRIVER_UNIX = "path.edge.driver.unix";
+
+    public static final String PATH_GECKO_DRIVER_UNIX = "path.gecko.driver.unix";
+
     public static final String PATH_FIREFOX_BIN = "path.firefox.bin";
 
     public static final String IMPLICITLY_WAIT = "implicitly.wait";

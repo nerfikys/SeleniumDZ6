@@ -56,20 +56,19 @@ public class PoiskPage extends BasePage {
 
     @Step("Выбор 8 чётных продуктов")
     public PoiskPage turn8Product() {
-         //  wait.until(ExpectedConditions.visibilityOfAllElements(listProduct);
         int numbers = 0;
         int i = 1;
         while (numbers < 8) {
             List<WebElement> inBasket = listProduct.get(i * 2 - 1).findElements(By.xpath(".//span[text()='В корзину']"));
             if (inBasket.size() == 2) {
-                dataManager.getProductArrayList().add(new Product(listProduct.get(i * 2 - 1).findElement(By.xpath(".//a/span")).getText(),
+                dataManager.addProduct(new Product(listProduct.get(i * 2 - 1).findElement(By.xpath(".//a/span")).getText(),
                         Utils.convertToInteger(inBasket.get(0).findElement(By.xpath("./../../../../../../..//span")).getText())));
                 (inBasket.get(1)).click();
                 wait.until(ExpectedConditions.invisibilityOf(inBasket.get(1)));
                 numbers++;
             } else {
                 if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("За час")) {
-                    dataManager.getProductArrayList().add(new Product(listProduct.get(i * 2 - 1).findElement(By.xpath(".//a/span")).getText(),
+                    dataManager.addProduct(new Product(listProduct.get(i * 2 - 1).findElement(By.xpath(".//a/span")).getText(),
                             Utils.convertToInteger(inBasket.get(0).findElement(By.xpath("./../../../../../../..//span")).getText())));
                     (inBasket.get(0)).click();
                     wait.until(ExpectedConditions.invisibilityOf(inBasket.get(0)));

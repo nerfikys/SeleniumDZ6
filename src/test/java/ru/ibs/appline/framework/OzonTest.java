@@ -2,29 +2,21 @@ package ru.ibs.appline.framework;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import ru.ibs.appline.framework.base.BaseTests;
+import ru.ibs.appline.framework.base.Base;
 
 
-public class Test extends BaseTests {
+class OzonTest extends Base {
     @ParameterizedTest
     @CsvSource(value = {
             "iphone"
     })
-    public void oneTest(String word) {
+    void oneTest(String word) {
         app.getHomePage()
                 .checkOpenPage()
                 .getHeader()
-                .SendPoiskMessedge(word)
+                .sendPoiskMessedge(word)
                 .clickFind()
-                //  .setUpFilter("Сроки","До 2 дней","true")
-                //  .setUpFilter("Доставка","","true")
-                //  .setUpFilter("Бренды","Apple","false")
-                //  .setUpFilter("Premium","","true")
-                // .setUpFilter("Бестселлеры","","true")
-                //  .setUpFilter("со скидкой","","true")
                 .setUpFilter("Цена", "до", "150000")
-                //  .setUpFilter("Продавец","OZON","true")
-                //   .setUpFilter("Оперативная","4-8","click")
                 .setUpFilter("Высокий рейтинг", "", "click")
                 .setUpFilter("Беспроводные", "NFC", "click")
                 .turn8Product()

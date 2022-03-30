@@ -23,8 +23,8 @@ public class TestPropManager {
 
     private void loadAppicationProperties() {
         String nameFile = System.getProperty("propFile", "application");
-        try {
-            properties.load(new FileInputStream("src/main/resources/" + nameFile + ".properties"));
+        try(FileInputStream stream = new FileInputStream("src/main/resources/" + nameFile + ".properties")) {
+            properties.load(stream);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,8 +41,8 @@ public class TestPropManager {
                 }));
     }
 
-    public String getProperty(String key, String defaulValue) {
-        return properties.getProperty(key, defaulValue);
+    public String getProperty(String key, String defaultValue) {
+        return properties.getProperty(key, defaultValue);
     }
 
     public String getProperty(String key) {
