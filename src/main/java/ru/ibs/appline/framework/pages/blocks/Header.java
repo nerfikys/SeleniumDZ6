@@ -1,6 +1,5 @@
 package ru.ibs.appline.framework.pages.blocks;
 
-import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,20 +40,17 @@ public class Header implements WrapsElement {
         return element.findElement(By.xpath(webElementBasketCount));
     }
 
-    @Step("Отправка текста в строку поиска")
     public Header sendPoiskMessedge(String words) {
         element.findElement(By.xpath(poisk)).clear();
         element.findElement(By.xpath(poisk)).sendKeys(words);
         return this;
     }
 
-    @Step("Нажатие на кнопку поиска")
     public PoiskPage clickFind() {
         waitToClickable(element.findElement(By.xpath(clickPoisk))).click();
         return PageManager.getINSTANCE().getPage(PoiskPage.class);
     }
 
-    @Step("Нажатие на корзину")
     public BasketPage clickOnBasket() {
         waitToClickable(element.findElement(By.xpath(webElementBasket))).click();
         return PageManager.getINSTANCE().getPage(BasketPage.class);

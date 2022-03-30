@@ -1,6 +1,5 @@
 package ru.ibs.appline.framework.pages;
 
-import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -26,14 +25,12 @@ public class BasketPage extends BasePage {
     @FindBy(xpath = "//span[contains(text(),'Удалить выбранные')]")
     WebElement dell;
 
-    @Step("Обязательная проверка при первом входе на наличие всплывающего окна и его закрытие")
     public BasketPage checkAlert() {
         waitUtilElementToBeVisible(alert);
         waitToClickable(alert.findElements(By.xpath("./../../../../..//button")).get(1)).click();
         return this;
     }
 
-    @Step("Проверка что всё из списка присутствует в корзине")
     public BasketPage checkBasketPull() {
         wait.until(ExpectedConditions.visibilityOfAllElements(mainList));
         List<Product> productList = (ArrayList) dataManager.getProductArrayList().clone();
@@ -58,21 +55,19 @@ public class BasketPage extends BasePage {
         return this;
     }
 
-    @Step("Проверяем текст \"Ваша корзина {number} товаров\"")
-    public BasketPage checkTextBasketProducts(int number) {
+    public BasketPage checkTextBasketProducts() {
+        int number = dataManager.getNumber();
         Assertions.assertTrue(totalInfo.get(0).getText().contains("Ваша корзина"), "Не найден текст 'Ваша корзина'");
         Assertions.assertTrue(totalInfo.get(1).getText().contains(number + " товаров"), "Число товаров не совпало ожидалось: " + number + ", а на самом деле: " + totalInfo.get(1).getText().split(" ")[0]);
         return this;
     }
 
-    @Step("Удалить всё из корзины")
     public BasketPage dellAllFromBasket() {
         waitToClickable(dell).click();
         waitToClickable(driverManager.getDriver().findElement(By.xpath("//div[contains(text(),'Удаление товаров')]/..//button"))).click();
         return this;
     }
 
-    @Step("Проверка что корзина пуста")
     public BasketPage checkEmpty() {
         Assertions.assertEquals("Корзина пуста", driverManager.getDriver().findElement(By.xpath("//h1")).getText(), "На странице не найден необходимый текст");
         return this;

@@ -1,6 +1,5 @@
 package ru.ibs.appline.framework.pages;
 
-import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -23,7 +22,6 @@ public class PoiskPage extends BasePage {
     @FindBy(xpath = "//div[@data-widget='searchResultsSort']")
     WebElement placeWithFilters;
 
-    @Step("Установка значения фильтра")
     public PoiskPage setUpFilter(String nameOfFilter, String valueName, String value) {
         boolean flagFind = false;
         wait.until(ExpectedConditions.visibilityOfAllElements(filters));
@@ -87,7 +85,6 @@ public class PoiskPage extends BasePage {
         inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), "" + value, Keys.ENTER);
     }
 
-    @Step("Выбор 8 чётных продуктов")
     public PoiskPage turn8Product() {
         int numbers = 0;
         int i = 1;
@@ -109,7 +106,6 @@ public class PoiskPage extends BasePage {
         return this;
     }
 
-    @Step("Выбор всех нечётных продуктов")
     public PoiskPage turnAllProduct() {
         int numbers = 0;
         int i = 0;

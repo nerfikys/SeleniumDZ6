@@ -1,8 +1,7 @@
 package ru.ibs.appline.framework.pages;
 
 
-import io.qameta.allure.Attachment;
-import io.qameta.allure.Step;
+import io.qameta.allure.Allure;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -42,9 +41,8 @@ public class BasePage {
         return new Header(header);
     }
 
-    @Step("Распечатка отчёта")
-    @Attachment(value = "ProductList", type = "text/plain", fileExtension = ".txt")
     public byte[] printListOfProduct() {
+        Allure.getLifecycle().addAttachment("ProductList", "text/plain", ".txt", dataManager.toString().getBytes(StandardCharsets.UTF_8));
         return dataManager.toString().getBytes(StandardCharsets.UTF_8);
     }
 

@@ -4,8 +4,9 @@ public class Utils {
     public static Integer convertToInteger(String text) {
         return Integer.parseInt(text.replaceAll("\\D", ""));
     }
-    public static String withoutSpace(String s){
-        return s.replaceAll(" ","");
+
+    public static String withoutSpace(String s) {
+        return s.replaceAll(" ", "");
     }
 
 }
