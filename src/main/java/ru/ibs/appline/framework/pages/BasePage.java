@@ -3,9 +3,12 @@ package ru.ibs.appline.framework.pages;
 
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.ibs.appline.framework.manager.DataManager;
@@ -51,6 +54,66 @@ public class BasePage {
 
     protected WebElement waitUtilElementToBeVisible(WebElement element) {
         return wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
+    public static ExpectedCondition<Boolean> textToBePresentWithoutSpace(final WebElement element,
+                                                                         final String text) {
+        return new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                try {
+                    String elementText = element.getText().replaceAll(" ", "");
+                    return elementText.contains(text);
+                } catch (StaleElementReferenceException e) {
+                    return false;
+                }
+            }
+
+            @Override
+            public String toString() {
+                return String.format("text ('%s') to be present in element %s", text, element);
+            }
+        };
+    }
+
+    public static ExpectedCondition<Boolean> textToBePresentInTwoPart(final WebElement element,
+                                                                      final String text, final String text2) {
+        return new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                try {
+                    String elementText = element.getText();
+                    return elementText.contains(text) && elementText.contains(text2);
+                } catch (StaleElementReferenceException e) {
+                    return false;
+                }
+            }
+
+            @Override
+            public String toString() {
+                return String.format("text ('%s','%s') to be present in element %s", text, text2, element);
+            }
+        };
+    }
+
+    public static ExpectedCondition<Boolean> textToBePresentPart3(final WebElement element,
+                                                                  final String text, final String text2, final String text3) {
+        return new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                try {
+                    String elementText = element.getText();
+                    return elementText.contains(text) && elementText.contains(text2) && elementText.replaceAll(" ", "").contains(text3);
+                } catch (StaleElementReferenceException e) {
+                    return false;
+                }
+            }
+
+            @Override
+            public String toString() {
+                return String.format("text ('%s','%s','%s') to be present in element %s", text, text2, text3, element);
+            }
+        };
     }
 
 }

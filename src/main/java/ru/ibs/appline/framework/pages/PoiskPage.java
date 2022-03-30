@@ -20,6 +20,9 @@ public class PoiskPage extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'search-result')]/div/div")
     List<WebElement> listProduct;
 
+    @FindBy(xpath = "//div[@data-widget='searchResultsSort']")
+    WebElement placeWithFilters;
+
     @Step("Установка значения фильтра")
     public PoiskPage setUpFilter(String nameOfFilter, String valueName, String value) {
         boolean flagFind = false;
@@ -31,15 +34,13 @@ public class PoiskPage extends BasePage {
                 boolean flagFindValue = false;
                 if (value.equals("click")) {
                     if (valueName.equals("")) {
-                        waitToClickable(element.findElement(By.xpath(".//span"))).click();
+                        oneClickFilter(element);
                     } else {
-                        waitToClickable(element.findElement(By.xpath(".//*[contains(text(),'" + valueName + "')]"))).click();
+                        oneOfManyClickFilter(element, valueName);
                     }
                     flagFindValue = true;
                 } else if (valueName.equals("от") || valueName.equals("до")) {
-
-                    WebElement inputBox = element.findElement(By.xpath(".//p[contains(text(),'" + valueName + "')]/../input"));
-                    inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), "" + value);
+                    putNumber(element, valueName, value);
                     flagFindValue = true;
                 } else {
                     Assertions.fail("С такими входными данными нельзя заполнить поля: " + nameOfFilter + " " + valueName + " " + value);
@@ -50,8 +51,40 @@ public class PoiskPage extends BasePage {
             }
         }
         Assertions.assertTrue(flagFind, "Фильтр " + nameOfFilter + " не был найден");
-        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(filters)));
+        checkWait(nameOfFilter, valueName, value);
         return this;
+    }
+
+    private void checkWait(String nameOfFilter, String valueName, String value) {
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(filters)));
+        if (value.equals("click")) {
+            if (valueName.equals("")) {
+                wait.until(ExpectedConditions.textToBePresentInElement(placeWithFilters, nameOfFilter));
+            } else {
+                wait.until(textToBePresentInTwoPart(placeWithFilters, nameOfFilter, valueName));
+            }
+        } else if (valueName.equals("от") || valueName.equals("до")) {
+            wait.until(textToBePresentPart3(placeWithFilters, nameOfFilter, valueName, value));
+        }
+    }
+
+    private void oneClickFilter(WebElement element) {
+        waitToClickable(element.findElement(By.xpath(".//span"))).click();
+    }
+
+    private void oneOfManyClickFilter(WebElement element, String valueName) {
+        if (element.getText().contains("Посмотреть все")) {
+            waitToClickable(element.findElement(By.xpath(".//span/span"))).click();
+            waitUtilElementToBeVisible(element.findElement(By.xpath(".//input"))).sendKeys(valueName);
+            waitToClickable(element.findElement(By.xpath(".//span[contains(text(),'" + valueName + "')]"))).click();
+        } else {
+            waitToClickable(element.findElement(By.xpath(".//*[contains(text(),'" + valueName + "')]"))).click();
+        }
+    }
+
+    private void putNumber(WebElement element, String valueName, String value) {
+        WebElement inputBox = element.findElement(By.xpath(".//p[contains(text(),'" + valueName + "')]/../input"));
+        inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), "" + value, Keys.ENTER);
     }
 
     @Step("Выбор 8 чётных продуктов")
@@ -61,20 +94,15 @@ public class PoiskPage extends BasePage {
         while (numbers < 8) {
             List<WebElement> inBasket = listProduct.get(i * 2 - 1).findElements(By.xpath(".//span[text()='В корзину']"));
             if (inBasket.size() == 2) {
-                add(listProduct.get(i * 2 - 1), inBasket.get(0));
                 (inBasket.get(1)).click();
-                wait.until(ExpectedConditions.invisibilityOf(inBasket.get(1)));
+                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+                add(listProduct.get(i * 2 - 1));
                 numbers++;
-            } else {
-                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                    add(listProduct.get(i * 2 - 1), inBasket.get(0));
-                    (inBasket.get(0)).click();
-                    wait.until(ExpectedConditions.invisibilityOf(inBasket.get(0)));
-                    numbers++;
-                }
-                if (driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).size() == 2) {
-                    driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).get(1).findElement(By.xpath("/../../../div/div/button")).click();
-                }
+            } else if (inBasket.size() == 1 & !inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
+                (inBasket.get(0)).click();
+                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+                add(listProduct.get(i * 2 - 1));
+                numbers++;
             }
             i++;
         }
@@ -88,27 +116,25 @@ public class PoiskPage extends BasePage {
         while (i * 2 < listProduct.size()) {
             List<WebElement> inBasket = listProduct.get(i * 2).findElements(By.xpath(".//span[text()='В корзину']"));
             if (inBasket.size() == 2) {
-                add(listProduct.get(i * 2), inBasket.get(0));
                 (inBasket.get(1)).click();
-                wait.until(ExpectedConditions.invisibilityOf(inBasket.get(1)));
+                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+                add(listProduct.get(i * 2));
                 numbers++;
-            } else if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                add(listProduct.get(i * 2), inBasket.get(0));
+            } else if (inBasket.size() == 1 & !inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
+
                 (inBasket.get(0)).click();
-                wait.until(ExpectedConditions.invisibilityOf(inBasket.get(0)));
+                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+                add(listProduct.get(i * 2));
                 numbers++;
-            }
-            if (driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).size() == 2) {
-                driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).get(1).findElement(By.xpath("/../../../div/div/button")).click();
             }
             i++;
         }
         return this;
     }
 
-    private void add(WebElement product, WebElement inBasket) {
+    private void add(WebElement product) {
         String title = product.findElement(By.xpath(".//a/span")).getText();
-        List<WebElement> spans = inBasket.findElements(By.xpath("./../../../../../../..//span"));
+        List<WebElement> spans = product.findElements(By.xpath("./div/div/span[contains(text(),'₽')]"));
         int value = 0;
         if (spans.get(0).getText().contains("−")) {
             value = Utils.convertToInteger(spans.get(1).getText());

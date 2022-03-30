@@ -11,6 +11,8 @@ public class DataManager {
         this.productArrayList = new ArrayList<>();
     }
 
+    private int number = 0;
+
     static DataManager INSTANCE = null;
 
     private ArrayList<Product> productArrayList;
@@ -24,7 +26,8 @@ public class DataManager {
     }
 
     public void dellDataManager() {
-        INSTANCE = null;
+        productArrayList.clear();
+        number = 0;
 
     }
 
@@ -39,8 +42,13 @@ public class DataManager {
         return product;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
     public void addProduct(Product product) {
         productArrayList.add(product);
+        number++;
     }
 
     public ArrayList<Product> getProductArrayList() {

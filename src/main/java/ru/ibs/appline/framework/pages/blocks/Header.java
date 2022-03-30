@@ -20,6 +20,8 @@ public class Header implements WrapsElement {
 
     private final String webElementBasket = ".//a[@href='/cart']";
 
+    private final String webElementBasketCount = ".//a[@href='/cart']/span";
+
     private final String poisk = ".//input[@type]";
 
     private final String clickPoisk = ".//input[@type]/../..//button";
@@ -35,6 +37,10 @@ public class Header implements WrapsElement {
                 Duration.ofSeconds(Integer.parseInt(TestPropManager.getINSTANCE().getProperty(PropsConst.DURATION_TIMEOUT))));
     }
 
+    public WebElement getWebElementBasketCount() {
+        return element.findElement(By.xpath(webElementBasketCount));
+    }
+
     @Step("Отправка текста в строку поиска")
     public Header sendPoiskMessedge(String words) {
         element.findElement(By.xpath(poisk)).clear();
@@ -45,13 +51,13 @@ public class Header implements WrapsElement {
     @Step("Нажатие на кнопку поиска")
     public PoiskPage clickFind() {
         waitToClickable(element.findElement(By.xpath(clickPoisk))).click();
-        return PageManager.getINSTANCE().getPoiskPage();
+        return PageManager.getINSTANCE().getPage(PoiskPage.class);
     }
 
     @Step("Нажатие на корзину")
     public BasketPage clickOnBasket() {
         waitToClickable(element.findElement(By.xpath(webElementBasket))).click();
-        return PageManager.getINSTANCE().getBasketPage();
+        return PageManager.getINSTANCE().getPage(BasketPage.class);
     }
 
     public WebElement waitToClickable(WebElement webElement) {

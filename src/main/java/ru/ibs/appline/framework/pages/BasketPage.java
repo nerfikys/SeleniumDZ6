@@ -53,8 +53,8 @@ public class BasketPage extends BasePage {
                 }
             }
         }
-        Assertions.assertTrue(main.containsAll(main2) && main.size() == main2.size(), "На странице остались элементы которых нет в списке");
-        Assertions.assertTrue(productList.containsAll(productList2) && productList.size() == productList2.size(), "В списке остались элементы которых нет на странице");
+        Assertions.assertTrue(main2.containsAll(main) && main.size() == main2.size(), "На странице остались элементы которых нет в списке");
+        Assertions.assertTrue(productList2.containsAll(productList) && productList.containsAll(productList2) && productList.size() == productList2.size(), "В списке остались элементы которых нет на странице");
         return this;
     }
 

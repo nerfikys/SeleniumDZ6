@@ -1,20 +1,17 @@
 package ru.ibs.appline.framework.manager;
 
-import ru.ibs.appline.framework.pages.BasketPage;
-import ru.ibs.appline.framework.pages.HomePage;
-import ru.ibs.appline.framework.pages.PoiskPage;
+import ru.ibs.appline.framework.pages.BasePage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PageManager {
 
     private static PageManager INSTANCE = null;
-
-    private HomePage homePage;
-    private BasketPage basketPage;
-    private PoiskPage poiskPage;
+    private Map<String, BasePage> mapPages = new HashMap<>();
 
     private PageManager() {
     }
-
 
     public static PageManager getINSTANCE() {
         if (INSTANCE == null) {
@@ -24,27 +21,17 @@ public class PageManager {
     }
 
     public void dellPageManager() {
-        INSTANCE = null;
+        mapPages.clear();
     }
 
-    public HomePage getHomePage() {
-        if (homePage == null) {
-            homePage = new HomePage();
+    public <T extends BasePage> T getPage(Class<T> tClass) {
+        if (mapPages.isEmpty() || mapPages.get(tClass.getName()) == null) {
+            try {
+                mapPages.put(tClass.getName(), tClass.newInstance());
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
-        return homePage;
-    }
-
-    public PoiskPage getPoiskPage() {
-        if (poiskPage == null) {
-            poiskPage = new PoiskPage();
-        }
-        return poiskPage;
-    }
-
-    public BasketPage getBasketPage() {
-        if (basketPage == null) {
-            basketPage = new BasketPage();
-        }
-        return basketPage;
+        return (T) mapPages.get(tClass.getName());
     }
 }

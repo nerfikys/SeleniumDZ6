@@ -3,15 +3,29 @@ package ru.ibs.appline.framework.base;
 import io.qameta.allure.Attachment;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import ru.ibs.appline.framework.manager.DriverManager;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class Screenshot implements AfterTestExecutionCallback {
 
     @Attachment(value = "ScreenShotOfFail", type = "image/png", fileExtension = ".png")
     public byte[] getScreenShot() {
-        return ((TakesScreenshot) DriverManager.getINSTANCE().getDriver()).getScreenshotAs(OutputType.BYTES);
+        BufferedImage image = new AShot()
+                .shootingStrategy(ShootingStrategies.viewportPasting(100))
+                .takeScreenshot(DriverManager.getINSTANCE().getDriver()).getImage();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(image, "png", baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
