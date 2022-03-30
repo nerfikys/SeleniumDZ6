@@ -44,7 +44,7 @@ public class BasketPage extends BasePage {
         main.remove(0);
         for (WebElement x : main) {
             for (Product product : productList) {
-                if (x.findElement(By.xpath("./div/a")).getText().contains(product.getTitle())) {
+                if (x.findElement(By.xpath("./div/a")).getText().split("\n")[0].equals(product.getTitle())) {
                     if (Utils.convertToInteger(x.findElements(By.xpath("./div//span[contains(text(),'₽')]")).get(1).getText()).equals(product.getPrice())) {
                         productList2.add(product);
                         main2.add(x);

@@ -66,7 +66,7 @@ public class PoiskPage extends BasePage {
                 wait.until(ExpectedConditions.invisibilityOf(inBasket.get(1)));
                 numbers++;
             } else {
-                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("За час")) {
+                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
                     add(listProduct.get(i * 2-1), inBasket.get(0));
                     (inBasket.get(0)).click();
                     wait.until(ExpectedConditions.invisibilityOf(inBasket.get(0)));
@@ -112,7 +112,7 @@ public class PoiskPage extends BasePage {
         String title = product.findElement(By.xpath(".//a/span")).getText();
         List<WebElement> spans = inBasket.findElements(By.xpath("./../../../../../../..//span"));
         int value = 0;
-        if (spans.get(0).getText().contains("%")) {
+        if (spans.get(0).getText().contains("−")) {
             value = Utils.convertToInteger(spans.get(1).getText());
         } else {
             value = Utils.convertToInteger(spans.get(0).getText());
