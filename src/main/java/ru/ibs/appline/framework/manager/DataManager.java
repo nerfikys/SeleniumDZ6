@@ -53,9 +53,9 @@ public class DataManager {
         String result = "";
         for (Product x : productArrayList) {
             if (x.getPrice().equals(max)) {
-                result = result.concat("Этот продукт с наибольшей ценой! Название: " + x.getTitle() + ". Цена: " + x.getPrice() + "\n");
+                result = result.concat("Этот продукт с наибольшей ценой!\nНазвание: " + x.getTitle() + "\n\tЦена: " + x.getPrice() + "\n");
             } else {
-                result = result.concat("Название: " + x.getTitle() + ". Цена: " + x.getPrice() + "\n");
+                result = result.concat("Название: " + x.getTitle() + "\n\tЦена: " + x.getPrice() + "\n");
             }
         }
         return result;

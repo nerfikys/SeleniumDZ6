@@ -48,6 +48,7 @@ public class BasketPage extends BasePage {
                     if (Utils.convertToInteger(x.findElements(By.xpath("./div//span[contains(text(),'₽')]")).get(1).getText()).equals(product.getPrice())) {
                         productList2.add(product);
                         main2.add(x);
+                        break;
                     }
                 }
             }
