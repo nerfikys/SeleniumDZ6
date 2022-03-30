@@ -61,13 +61,13 @@ public class PoiskPage extends BasePage {
         while (numbers < 8) {
             List<WebElement> inBasket = listProduct.get(i * 2 - 1).findElements(By.xpath(".//span[text()='В корзину']"));
             if (inBasket.size() == 2) {
-                add(listProduct.get(i * 2-1), inBasket.get(0));
+                add(listProduct.get(i * 2 - 1), inBasket.get(0));
                 (inBasket.get(1)).click();
                 wait.until(ExpectedConditions.invisibilityOf(inBasket.get(1)));
                 numbers++;
             } else {
                 if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                    add(listProduct.get(i * 2-1), inBasket.get(0));
+                    add(listProduct.get(i * 2 - 1), inBasket.get(0));
                     (inBasket.get(0)).click();
                     wait.until(ExpectedConditions.invisibilityOf(inBasket.get(0)));
                     numbers++;
@@ -92,16 +92,14 @@ public class PoiskPage extends BasePage {
                 (inBasket.get(1)).click();
                 wait.until(ExpectedConditions.invisibilityOf(inBasket.get(1)));
                 numbers++;
-            } else {
-                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                    add(listProduct.get(i * 2), inBasket.get(0));
-                    (inBasket.get(0)).click();
-                    wait.until(ExpectedConditions.invisibilityOf(inBasket.get(0)));
-                    numbers++;
-                }
-                if (driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).size() == 2) {
-                    driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).get(1).findElement(By.xpath("/../../../div/div/button")).click();
-                }
+            } else if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
+                add(listProduct.get(i * 2), inBasket.get(0));
+                (inBasket.get(0)).click();
+                wait.until(ExpectedConditions.invisibilityOf(inBasket.get(0)));
+                numbers++;
+            }
+            if (driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).size() == 2) {
+                driverManager.getDriver().findElements(By.xpath("//div[@data-widget='container']")).get(1).findElement(By.xpath("/../../../div/div/button")).click();
             }
             i++;
         }
