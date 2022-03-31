@@ -10,7 +10,7 @@ import ru.ibs.appline.framework.pages.HomePage;
 class OzonTest extends Base {
     @ParameterizedTest
     @CsvSource(value = {
-            "iphone", "iphone", "iphone"
+            "iphone", "iphone", "iphone","iphone", "iphone", "iphone","iphone", "iphone", "iphone", "iphone"
     })
     void oneTest(String word) {
         app.getPage(HomePage.class)
@@ -34,7 +34,7 @@ class OzonTest extends Base {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "беспроводные наушники", "беспроводные наушники", "беспроводные наушники",
+            "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники","беспроводные наушники", "беспроводные наушники", "беспроводные наушники"
     })
     void twoTest(String word) {
         app.getPage(HomePage.class)
