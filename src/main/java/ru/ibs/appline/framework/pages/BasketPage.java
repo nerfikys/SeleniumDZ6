@@ -58,8 +58,9 @@ public class BasketPage extends BasePage {
         return this;
     }
 
-    @Step("Проверяем текст \"Ваша корзина {number} товаров\"")
-    public BasketPage checkTextBasketProducts(int number) {
+    @Step("Проверяем текст \"Ваша корзина n товаров\"")
+    public BasketPage checkTextBasketProducts() {
+        int number = dataManager.getNumber();
         Assertions.assertTrue(totalInfo.get(0).getText().contains("Ваша корзина"), "Не найден текст 'Ваша корзина'");
         Assertions.assertTrue(totalInfo.get(1).getText().contains(number + " товаров"), "Число товаров не совпало ожидалось: " + number + ", а на самом деле: " + totalInfo.get(1).getText().split(" ")[0]);
         return this;

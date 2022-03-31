@@ -26,7 +26,7 @@ class OzonTest extends Base {
                 .clickOnBasket()
                 .checkAlert()
                 .checkBasketPull()
-                .checkTextBasketProducts(8)
+                .checkTextBasketProducts()
                 .dellAllFromBasket()
                 .checkEmpty()
                 .printListOfProduct();
@@ -52,7 +52,7 @@ class OzonTest extends Base {
                 .clickOnBasket()
                 .checkAlert()
                 .checkBasketPull()
-                .checkTextBasketProducts(DataManager.getINSTANCE().getProductArrayList().size())
+                .checkTextBasketProducts()
                 .dellAllFromBasket()
                 .checkEmpty()
                 .printListOfProduct();
