@@ -95,11 +95,13 @@ public class PoiskPage extends BasePage {
                 wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
                 add(listProduct.get(i * 2 - 1));
                 numbers++;
-            } else if (inBasket.size() == 1 & !inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                (inBasket.get(0)).click();
-                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-                add(listProduct.get(i * 2 - 1));
-                numbers++;
+            } else if (inBasket.size() == 1) {
+                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
+                    (inBasket.get(0)).click();
+                    wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+                    add(listProduct.get(i * 2 - 1));
+                    numbers++;
+                }
             }
             i++;
         }
@@ -116,12 +118,13 @@ public class PoiskPage extends BasePage {
                 wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
                 add(listProduct.get(i * 2));
                 numbers++;
-            } else if (inBasket.size() == 1 & !inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-
-                (inBasket.get(0)).click();
-                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-                add(listProduct.get(i * 2));
-                numbers++;
+            } else if (inBasket.size() == 1) {
+                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
+                    (inBasket.get(0)).click();
+                    wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+                    add(listProduct.get(i * 2));
+                    numbers++;
+                }
             }
             i++;
         }
