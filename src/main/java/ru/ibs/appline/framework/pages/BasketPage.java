@@ -1,5 +1,6 @@
 package ru.ibs.appline.framework.pages;
 
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -33,25 +34,23 @@ public class BasketPage extends BasePage {
 
     public BasketPage checkBasketPull() {
         wait.until(ExpectedConditions.visibilityOfAllElements(mainList));
-        List<Product> productList = (ArrayList) dataManager.getProductArrayList().clone();
+        List<Product> productList = dataManager.getProductArrayList();
         List<Product> productList2 = new ArrayList<>();
-        List<WebElement> main = new ArrayList<>();
-        List<WebElement> main2 = new ArrayList<>();
-        main.addAll(mainList);
-        main.remove(0);
+        List<WebElement> main = mainList.subList(1, mainList.size());
+        boolean flagNotFind = true;
         for (WebElement x : main) {
             for (Product product : productList) {
                 if (x.findElement(By.xpath("./div/a")).getText().split("\n")[0].equals(product.getTitle())) {
                     if (Utils.convertToInteger(x.findElements(By.xpath("./div//span[contains(text(),'₽')]")).get(1).getText()).equals(product.getPrice())) {
                         productList2.add(product);
-                        main2.add(x);
+                        flagNotFind = false;
                         break;
                     }
                 }
             }
+            Assertions.assertFalse(flagNotFind, "Продукт " + x.findElement(By.xpath("./div/a")).getText().split("\n")[0] + " не был найден в списке");
         }
-        Assertions.assertTrue(main2.containsAll(main) && main.size() == main2.size(), "На странице остались элементы которых нет в списке");
-        Assertions.assertTrue(productList2.containsAll(productList) && productList.containsAll(productList2) && productList.size() == productList2.size(), "В списке остались элементы которых нет на странице");
+        Assertions.assertTrue(productList2.containsAll(productList) && productList.containsAll(productList2) && productList.size() == productList2.size(), "Со страницы не получилось собрать идентичный список продуктов");
         return this;
     }
 
