@@ -33,28 +33,70 @@ public class BasketPage extends BasePage {
         return this;
     }
 
+
+//    @Step("Проверка что всё из списка присутствует в корзине2")
+//    public BasketPage checkBasketPull2() {
+//        wait.until(ExpectedConditions.visibilityOfAllElements(mainList));
+//        for (Product product : dataManager.getProductArrayList()) {
+//            boolean flagNotFind = true;
+//            for (int i = 1; i < mainList.size(); i++) {
+//                if (mainList.get(i).findElement(By.xpath("./div/a")).getText().split("\n")[0].equals(product.getTitle())) {
+//                    if (Utils.convertToInteger(mainList.get(i).findElements(By.xpath("./div//span[contains(text(),'₽')]")).get(1).getText()).equals(product.getPrice())) {
+//                        flagNotFind = false;
+//                        break;
+//                    }
+//                }
+//            }
+//            Assertions.assertFalse(flagNotFind, "Продукт " + product.getTitle() + " и с ценой " + product.getPrice() + " не был найден в корзине");
+//        }
+//        return this;
+//    }
+//
+//    @Step("Проверка что всё из списка присутствует в корзине")
+//    public BasketPage checkBasketPull() {
+//        wait.until(ExpectedConditions.visibilityOfAllElements(mainList));
+//        List<Product> productList = (ArrayList) dataManager.getProductArrayList().clone();
+//        List<Product> productList2 = new ArrayList<>();
+//        List<WebElement> main = new ArrayList<>();
+//        List<WebElement> main2 = new ArrayList<>();
+//        main.addAll(mainList);
+//        main.remove(0);
+//        for (WebElement x : main) {
+//            for (Product product : productList) {
+//                if (x.findElement(By.xpath("./div/a")).getText().split("\n")[0].equals(product.getTitle())) {
+//                    if (Utils.convertToInteger(x.findElements(By.xpath("./div//span[contains(text(),'₽')]")).get(1).getText()).equals(product.getPrice())) {
+//                        productList2.add(product);
+//                        main2.add(x);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        Assertions.assertTrue(main2.containsAll(main) && main.containsAll(main2) && main.size() == main2.size(), "На странице остались элементы которых нет в списке");
+//        Assertions.assertTrue(productList2.containsAll(productList) && productList.containsAll(productList2) && productList.size() == productList2.size(), "В списке остались элементы которых нет на странице");
+//        return this;
+//    }
+
     @Step("Проверка что всё из списка присутствует в корзине")
     public BasketPage checkBasketPull() {
         wait.until(ExpectedConditions.visibilityOfAllElements(mainList));
-        List<Product> productList = (ArrayList) dataManager.getProductArrayList().clone();
+        List<Product> productList = dataManager.getProductArrayList();
         List<Product> productList2 = new ArrayList<>();
-        List<WebElement> main = new ArrayList<>();
-        List<WebElement> main2 = new ArrayList<>();
-        main.addAll(mainList);
-        main.remove(0);
+        List<WebElement> main = mainList.subList(1, mainList.size());
+        boolean flagNotFind = true;
         for (WebElement x : main) {
             for (Product product : productList) {
                 if (x.findElement(By.xpath("./div/a")).getText().split("\n")[0].equals(product.getTitle())) {
                     if (Utils.convertToInteger(x.findElements(By.xpath("./div//span[contains(text(),'₽')]")).get(1).getText()).equals(product.getPrice())) {
                         productList2.add(product);
-                        main2.add(x);
+                        flagNotFind = false;
                         break;
                     }
                 }
             }
+            Assertions.assertFalse(flagNotFind, "Продукт " + x.findElement(By.xpath("./div/a")).getText().split("\n")[0] + " не был найден в списке");
         }
-        Assertions.assertTrue(main2.containsAll(main) && main.size() == main2.size(), "На странице остались элементы которых нет в списке");
-        Assertions.assertTrue(productList2.containsAll(productList) && productList.containsAll(productList2) && productList.size() == productList2.size(), "В списке остались элементы которых нет на странице");
+        Assertions.assertTrue(productList2.containsAll(productList) && productList.containsAll(productList2) && productList.size() == productList2.size(), "Со страницы не получилось собрать идентичный список продуктов");
         return this;
     }
 
