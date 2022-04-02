@@ -10,6 +10,10 @@ import ru.ibs.appline.framework.pages.HomePage;
 class OzonTest extends Base {
     @ParameterizedTest
     @CsvSource(value = {
+            "iphone", "iphone", "iphone","iphone", "iphone", "iphone","iphone", "iphone", "iphone", "iphone",
+            "iphone", "iphone", "iphone","iphone", "iphone", "iphone","iphone", "iphone", "iphone", "iphone",
+            "iphone", "iphone", "iphone","iphone", "iphone", "iphone","iphone", "iphone", "iphone", "iphone",
+            "iphone", "iphone", "iphone","iphone", "iphone", "iphone","iphone", "iphone", "iphone", "iphone",
             "iphone", "iphone", "iphone","iphone", "iphone", "iphone","iphone", "iphone", "iphone", "iphone"
     })
     void oneTest(String word) {
@@ -21,7 +25,7 @@ class OzonTest extends Base {
                 .setUpFilter("Цена", "до", "150000")
                 .setUpFilter("Высокий рейтинг", "", "click")
                 .setUpFilter("Беспроводные", "NFC", "click")
-                .turn8Product()
+                .turnProduct("Чет",8)
                 .getHeader()
                 .clickOnBasket()
                 .checkAlert()
@@ -34,7 +38,11 @@ class OzonTest extends Base {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "беспроводные наушники", //"беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники","беспроводные наушники", "беспроводные наушники", "беспроводные наушники"
+            "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники","беспроводные наушники", "беспроводные наушники", "беспроводные наушники",
+            "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники","беспроводные наушники", "беспроводные наушники", "беспроводные наушники",
+            "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники","беспроводные наушники", "беспроводные наушники", "беспроводные наушники",
+            "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники","беспроводные наушники", "беспроводные наушники", "беспроводные наушники",
+            "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники", "беспроводные наушники","беспроводные наушники", "беспроводные наушники", "беспроводные наушники"
     })
     void twoTest(String word) {
         app.getPage(HomePage.class)
@@ -47,7 +55,7 @@ class OzonTest extends Base {
                 .setUpFilter("Бренды", "Samsung", "click")
                 .setUpFilter("Бренды", "Xiaomi", "click")
                 .setUpFilter("Высокий рейтинг", "", "click")
-                .turnAllProduct()
+                .turnProduct("Нечет",0)
                 .getHeader()
                 .clickOnBasket()
                 .checkAlert()

@@ -4,6 +4,7 @@ import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -87,53 +88,60 @@ public class PoiskPage extends BasePage {
         inputBox.sendKeys(Keys.chord(Keys.CONTROL, "a"), "" + value, Keys.ENTER);
     }
 
-    @Step("Выбор 8 чётных продуктов")
-    public PoiskPage turn8Product() {
-        int numbers = 0;
-        int i = 1;
-        while (numbers < 8) {
-            List<WebElement> inBasket = listProduct.get(i * 2 - 1).findElements(By.xpath(".//span[text()='В корзину']"));
-            if (inBasket.size() == 2) {
-                (inBasket.get(1)).click();
-                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-                add(listProduct.get(i * 2 - 1));
-                numbers++;
-            } else if (inBasket.size() == 1) {
-                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                    (inBasket.get(0)).click();
-                    wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-                    add(listProduct.get(i * 2 - 1));
-                    numbers++;
-                }
-            }
-            i++;
-        }
+    @Step("Выбор {number} продуктов с выбранной опцией: {option}")
+    public PoiskPage turnProduct(String option, int number) {
+        Assertions.assertTrue(number >= 0, "Указанно не корректное число: " + number);
+        if (option.equals("Чет")) {
+            turnProductFromList(1, number);
+        } else if (option.equals("Нечет")) {
+            turnProductFromList(2, number);
+        } else if (option.equals("Все")) {
+            turnProductFromList(0, number);
+        } else Assertions.fail("Была указана не известная функция ожидалось Чет/Нечет/Все, а полученна: " + option);
         return this;
     }
 
-    @Step("Выбор всех нечётных продуктов")
-    public PoiskPage turnAllProduct() {
-        int numbers = 0;
-        int i = 0;
-        while (i * 2 < listProduct.size()) {
-            List<WebElement> inBasket = listProduct.get(i * 2).findElements(By.xpath(".//span[text()='В корзину']"));
-            if (inBasket.size() == 2) {
-                (inBasket.get(1)).click();
-                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-                add(listProduct.get(i * 2));
-                numbers++;
-            } else if (inBasket.size() == 1) {
-                if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                    (inBasket.get(0)).click();
-                    wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-                    add(listProduct.get(i * 2));
-                    numbers++;
+    private void turnProductFromList(int znach, int howMuch) {
+        int lastChet = 0;
+        do {
+            int i = 0;
+            while (i < listProduct.size()) {
+                if((dataManager.getNumber() == howMuch)&&howMuch!=0){return;}
+                if ((znach == 1 && ((i+lastChet) % 2 == 0)) || (znach == 2 && ((i+lastChet) % 2 == 1))) {
+                    i++;
+                    continue;
                 }
+                clickBasket(listProduct.get(i));
+                i++;
             }
-            i++;
-        }
-        return this;
+            lastChet = (i+lastChet) % 2;
+        } while (buttonNext());
     }
+
+    private void clickBasket(WebElement elementProduct) {
+        List<WebElement> inBasket = elementProduct.findElements(By.xpath(".//span[text()='В корзину']"));
+        if (inBasket.size() == 2) {
+            (inBasket.get(1)).click();
+            wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+            add(elementProduct);
+        } else if (inBasket.size() == 1) {
+            if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
+                (inBasket.get(0)).click();
+                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+                add(elementProduct);
+            }
+        }
+    }
+
+    private boolean buttonNext() {
+        try {
+            driverManager.getDriver().findElement(By.xpath("//div[contains(text(),'Дальше')]")).click();
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
 
     private void add(WebElement product) {
         String title = product.findElement(By.xpath(".//a/span")).getText();
