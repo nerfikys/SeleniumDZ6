@@ -50,11 +50,18 @@ public class BasketPage extends BasePage {
             }
         Collections.sort(productList2);
         ArrayList<Product> productArrayList3 = new ArrayList<>();
+        ArrayList<Product> productArrayList4 = new ArrayList<>();
         if (!productList.equals(productList2)) {
             productArrayList3.addAll(productList);
             productArrayList3.removeAll(productList2);
+            if(productList.size()==productList2.size())
+            {
+                productArrayList4.addAll(productList2);
+                productArrayList4.removeAll(productList);
+            Assertions.fail("Со страницы не получилось собрать идентичный список продуктов, найденные различия: \nПервый список: "+productArrayList3+ "\nВторой список: "+productArrayList4);
+            }
         }
-        Assertions.assertTrue(productList.equals(productList2), "Со страницы не получилось собрать идентичный список продуктов"+productArrayList3);
+        Assertions.assertTrue(productArrayList3.isEmpty(), "Со страницы не получилось собрать идентичный список продуктов, не были найдены(вероятно они были удалены): "+productArrayList3);
         return this;
     }
 

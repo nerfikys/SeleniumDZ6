@@ -2,16 +2,14 @@ package ru.ibs.appline.framework.pages;
 
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.ibs.appline.framework.data.Product;
 import ru.ibs.appline.framework.utils.Utils;
 
+import java.time.Duration;
 import java.util.List;
 
 public class PoiskPage extends BasePage {
@@ -121,16 +119,26 @@ public class PoiskPage extends BasePage {
     private void clickBasket(WebElement elementProduct) {
         List<WebElement> inBasket = elementProduct.findElements(By.xpath(".//span[text()='В корзину']"));
         if (inBasket.size() == 2) {
-            (inBasket.get(1)).click();
-            wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-            add(elementProduct);
+          goodClick(inBasket.get(1),elementProduct);
         } else if (inBasket.size() == 1) {
             if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                (inBasket.get(0)).click();
-                wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-                add(elementProduct);
+                goodClick(inBasket.get(0),elementProduct);
             }
         }
+    }
+
+    private void goodClick(WebElement button,WebElement elementProduct){
+        Duration temp = driverManager.getDriver().manage().timeouts().getImplicitWaitTimeout();
+        driverManager.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        (button).click();
+        try {
+            wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+        }catch (TimeoutException e){
+            (button).click();
+            wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
+        }
+        wait.withTimeout(temp);
+        add(elementProduct);
     }
 
     private boolean buttonNext() {
