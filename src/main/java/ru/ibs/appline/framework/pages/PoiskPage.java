@@ -30,21 +30,21 @@ public class PoiskPage extends BasePage {
             if (element.getText().contains(nameOfFilter)) {
                 Actions action = new Actions(driverManager.getDriver());
                 action.moveToElement(element);
-                boolean flagFindValue = false;
                 if (value.equals("click")) {
                     if (valueName.equals("")) {
                         oneClickFilter(element);
                     } else {
-                        oneOfManyClickFilter(element, valueName);
+                        try {
+                            oneOfManyClickFilter(element, valueName);
+                        } catch (NoSuchElementException e) {
+                            Assertions.fail("У фильтра " + nameOfFilter + " не было найдено поле " + valueName);
+                        }
                     }
-                    flagFindValue = true;
                 } else if (valueName.equals("от") || valueName.equals("до")) {
                     putNumber(element, valueName, value);
-                    flagFindValue = true;
                 } else {
                     Assertions.fail("С такими входными данными нельзя заполнить поля: " + nameOfFilter + " " + valueName + " " + value);
                 }
-                Assertions.assertTrue(flagFindValue, "У фильтра " + nameOfFilter + " не было найдено поле " + valueName);
                 flagFind = true;
                 break;
             }
@@ -104,36 +104,42 @@ public class PoiskPage extends BasePage {
         do {
             int i = 0;
             while (i < listProduct.size()) {
-                if((dataManager.getNumber() == howMuch)&&howMuch!=0){return;}
-                if ((znach == 1 && ((i+lastChet) % 2 == 0)) || (znach == 2 && ((i+lastChet) % 2 == 1))) {
+                if ((dataManager.getNumber() == howMuch) && howMuch != 0) {
+                    return;
+                }
+                if ((znach == 1 && ((i + lastChet) % 2 == 0)) || (znach == 2 && ((i + lastChet) % 2 == 1))) {
                     i++;
                     continue;
                 }
-                clickBasket(listProduct.get(i));
+                try {
+                    clickBasket(listProduct.get(i));
+                } catch (StaleElementReferenceException e) {
+                    clickBasket(listProduct.get(i));
+                }
                 i++;
             }
-            lastChet = (i+lastChet) % 2;
+            lastChet = (i + lastChet) % 2;
         } while (buttonNext());
     }
 
     private void clickBasket(WebElement elementProduct) {
         List<WebElement> inBasket = elementProduct.findElements(By.xpath(".//span[text()='В корзину']"));
         if (inBasket.size() == 2) {
-          goodClick(inBasket.get(1),elementProduct);
+            goodClick(inBasket.get(1), elementProduct);
         } else if (inBasket.size() == 1) {
             if (!inBasket.get(0).findElement(By.xpath("./../../../../..//b")).getText().contains("час")) {
-                goodClick(inBasket.get(0),elementProduct);
+                goodClick(inBasket.get(0), elementProduct);
             }
         }
     }
 
-    private void goodClick(WebElement button,WebElement elementProduct){
+    private void goodClick(WebElement button, WebElement elementProduct) {
         Duration temp = driverManager.getDriver().manage().timeouts().getImplicitWaitTimeout();
-        driverManager.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        driverManager.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
         (button).click();
         try {
             wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             (button).click();
             wait.until(ExpectedConditions.textToBePresentInElement(getHeader().getWebElementBasketCount(), (dataManager.getNumber() + 1) + ""));
         }
