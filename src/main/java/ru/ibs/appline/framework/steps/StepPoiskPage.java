@@ -19,14 +19,10 @@ public class StepPoiskPage {
         }
     }
 
-    @И("Выбор 8 чётных продуктов")
-    public void turn8Product() {
-        PageManager.getINSTANCE().getPage(PoiskPage.class).turn8Product();
-    }
 
-    @И("Выбор всех нечётных продуктов")
-    public void turnAllProduct() {
-        PageManager.getINSTANCE().getPage(PoiskPage.class).turnAllProduct();
+    @И("^Выбор (\\d+) продуктов с выбранной опцией: \"(.+)\"$")
+    public void turnProduct(int number,String option) {
+        PageManager.getINSTANCE().getPage(PoiskPage.class).turnProduct(option, number);
     }
 
 }

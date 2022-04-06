@@ -2,12 +2,10 @@ package ru.ibs.appline.framework.data;
 
 import java.util.Objects;
 
-public class Product {
-
+public class Product implements Comparable {
 
     private final String title;
     private final Integer price;
-
 
     public Product(String title, Integer price) {
         this.title = title;
@@ -41,5 +39,11 @@ public class Product {
                 "title='" + title + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Product x = (Product) o;
+        return this.getTitle().concat(this.getPrice().toString()).compareTo(x.getTitle().concat(x.getPrice().toString()));
     }
 }
