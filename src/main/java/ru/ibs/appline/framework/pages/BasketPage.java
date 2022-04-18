@@ -19,7 +19,7 @@ public class BasketPage extends BasePage {
     @FindBy(xpath = "//span[contains(text(),'Добавить компанию')]")
     WebElement alert;
 
-    @FindBy(xpath = "//div[contains(@id,'split-Main')]/div/div/a/span")
+    @FindBy(xpath = "//span[contains(text(), 'избранное')]/../../../../../../../a/span[1]   ")
     List<WebElement> mainListTitle;
 
     @FindBy(xpath = "//section[@data-widget='total']/div/div/div/span")
@@ -68,7 +68,7 @@ public class BasketPage extends BasePage {
 
     public BasketPage dellAllFromBasket() {
         waitToClickable(dell).click();
-        waitToClickable(driverManager.getDriver().findElement(By.xpath("//div[contains(text(),'Удаление товаров')]/..//button"))).click();
+        waitToClickable(driverManager.getDriver().findElement(By.xpath("//div[contains(text(),'Удалить товар')]/..//button"))).click();
         return this;
     }
 
